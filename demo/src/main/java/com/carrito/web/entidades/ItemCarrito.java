@@ -1,5 +1,7 @@
 package com.carrito.web.entidades;
 
+import java.io.Serializable;
+
 import org.hibernate.annotations.GenericGenerator;
 
 import jakarta.persistence.Entity;
@@ -10,7 +12,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class ItemCarrito {
+public class ItemCarrito implements Serializable{
     
     @Id
     @GeneratedValue(generator = "uuid")

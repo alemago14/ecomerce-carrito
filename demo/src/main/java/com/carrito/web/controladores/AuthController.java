@@ -1,6 +1,8 @@
 package com.carrito.web.controladores;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +17,8 @@ import com.carrito.web.enumeraciones.Rol;
 import com.carrito.web.modelos.UsuarioModel;
 import com.carrito.web.repositorios.UsuarioRepository;
 import com.carrito.web.servicios.UsuarioService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AuthController {

@@ -1,6 +1,6 @@
 package com.carrito.web.entidades;
 
-import java.io.Serializable;
+import java.time.LocalDate;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -11,14 +11,14 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Producto implements Serializable{
+public class FechasPromocionales {
     
-    //atributos
     @Id
     @GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
     private String nombre;
     private String descripcion;
-    private double precio;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
 }

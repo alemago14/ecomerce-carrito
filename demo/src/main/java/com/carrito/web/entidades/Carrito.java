@@ -1,6 +1,7 @@
 package com.carrito.web.entidades;
 
-import java.time.LocalDateTime;
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,15 +23,14 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Carrito {
+public class Carrito implements Serializable{
     //atributos
     @Id
     @GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime fechaCompra;
+    private LocalDate fechaCompra;
 
     @Enumerated(EnumType.STRING)
     private TipoCarrito tipoCarrito;

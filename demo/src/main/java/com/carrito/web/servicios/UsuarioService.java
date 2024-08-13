@@ -1,5 +1,8 @@
 package com.carrito.web.servicios;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.carrito.web.convertidores.UsuarioConverter;
+import com.carrito.web.entidades.Carrito;
 import com.carrito.web.entidades.Usuario;
 import com.carrito.web.enumeraciones.Rol;
 import com.carrito.web.excepciones.WebException;
 import com.carrito.web.modelos.UsuarioModel;
+import com.carrito.web.repositorios.CarritoRepository;
 import com.carrito.web.repositorios.UsuarioRepository;
 
 @Service
@@ -22,6 +27,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioConverter usuarioConverter;
+
+    @Autowired
+    private CarritoRepository carritoRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -57,9 +65,28 @@ public class UsuarioService {
         usuario = usuarioConverter.modeloToEntidad(usuarioModel);
         usuario.setRol(Rol.NORMAL);
         usuario.setPassword(passwordEncoder.encode(usuarioModel.getPassword()));
+        usuario.setCarritos(new ArrayList<>());
 
         usuario = usuarioRepository.save(usuario);
 
+        return usuario;
+    }
+
+    public List<Usuario> listarUsuarios(){
+        return usuarioRepository.findAll();
+    }
+
+    public Usuario verificarRol(String idUsuario, LocalDate fechaActual){
+        Usuario usuario = usuarioRepository.getReferenceById(idUsuario);
+
+        double totalMes = carritoRepository.calcularTotalMes(idUsuario, fechaActual.minusMonths(1), fechaActual);
+
+        Rol nuevoRol = totalMes > 10000 ? Rol.VIP : Rol.NORMAL;
+
+        if(!usuario.getRol().equals(nuevoRol)){
+            usuario.setRol(nuevoRol);
+            usuarioRepository.save(usuario);
+        }
         return usuario;
     }
 }
