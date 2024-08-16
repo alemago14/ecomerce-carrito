@@ -5,10 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.carrito.web.entidades.FechasPromocionales;
+import com.carrito.web.entidades.Usuario;
+import com.carrito.web.enumeraciones.Rol;
 import com.carrito.web.excepciones.WebException;
 import com.carrito.web.modelos.FechasPromocionalesModel;
 import com.carrito.web.servicios.FechasPromocionalesService;
@@ -30,13 +34,14 @@ public class FechasPromocionalesController {
     @Autowired
     private FechasPromocionalesService fechasPromocionalesService;
 
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     @PostMapping("/nuevo")
     @Operation(summary = "Crear una nueva fecha promocional", description = "Guarda una nueva fecha promocional en la base de datos a partir de un fechaPromocionalModel")
     public ResponseEntity<Object> guardarFecha(@RequestBody FechasPromocionalesModel model) {
         try {
             model.setId(null);
             fechasPromocionalesService.guardarFecha(model);
-            return new ResponseEntity<>("Fechas creado", HttpStatus.CREATED);
+            return new ResponseEntity<>("Fechas creado", HttpStatus.OK);
         } catch (Exception e) {
             return  new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }

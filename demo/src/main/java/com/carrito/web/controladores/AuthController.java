@@ -39,7 +39,7 @@ public class AuthController {
     public String showRegistrationForm(ModelMap modelo) {
         UsuarioModel usuario = new UsuarioModel();
         modelo.addAttribute("usuario", usuario);
-        return "register"; // Devuelve la página de registro
+        return "register";
     }
 
     @PostMapping("/registrar")
@@ -50,6 +50,6 @@ public class AuthController {
             System.out.println(e);
         }
 
-        return "redirect:/login?registered"; // Redirigir a la página de login con un mensaje de éxito
+        return "redirect:/login?registered";
     }
 }

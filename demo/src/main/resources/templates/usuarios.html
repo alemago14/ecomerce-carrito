@@ -1,21 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Usuarios</title>
-    <!-- Puedes agregar aquí el link a tus estilos CSS y librerías como Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
+    <head th:replace="~{fragments/plantilla :: head}"></head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <body>
+    <nav th:replace="~{fragments/plantilla :: navbar}"></nav>
     <div class="container mt-5">
         <h1>Lista de Usuarios</h1>
         <table class="table table-striped" id="usuariosTable">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Nombre</th>
-                    <th>Email</th>
                     <th>Rol</th>
                 </tr>
             </thead>
@@ -42,9 +36,7 @@
                     data.forEach(function(usuario) {
                         const row = `
                             <tr>
-                                <td>${usuario.id}</td>
-                                <td>${usuario.nombre}</td>
-                                <td>${usuario.email}</td>
+                                <td>${usuario.username}</td>
                                 <td>${usuario.rol}</td>
                             </tr>
                         `;

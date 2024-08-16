@@ -42,16 +42,13 @@
 
 <script>
     $(document).ready(function() {
-        // Cargar el carrito al cargar la página
         $.ajax({
             url: '/api/v1/carrito/obtenerCarrito',
             type: 'GET',
             success: function(carrito) {
-                // Verifica si hay carrito en la sesión
                 if (carrito) {
                     $('#cartDate').text('Fecha: ' + carrito.fecha);
 
-                    // Poblar la tabla con los items del carrito
                     carrito.items.forEach(function(item) {
                         $('#cartItemsTable').append(`
                             <tr>
@@ -66,7 +63,6 @@
                         `);
                     });
 
-                    // Mostrar el subtotal, descuento y total
                     $('#subtotal').text(carrito.totalParcial.toFixed(2));
                     $('#descuento').text(carrito.descuento.toFixed(2));
                     $('#total').text(carrito.total.toFixed(2));
@@ -85,7 +81,7 @@
         console.log(id, nombre, cantidad);
         if (confirm('¿Estás seguro de que quieres eliminar este producto del carrito?')) {
             $.ajax({
-                url: '/api/v1/carrito/quitarItem', // Asegúrate de que esta URL sea correcta
+                url: '/api/v1/carrito/quitarItem',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ idProducto: id,  nombre: nombre, cantidad: cantidad}),

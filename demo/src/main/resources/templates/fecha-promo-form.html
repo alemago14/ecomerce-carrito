@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="~{fragments/plantilla :: head}">
+        <!-- SweetAlert CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+        <!-- SweetAlert JS -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+<body>
+    <nav th:replace="~{fragments/plantilla :: navbar}"></nav>
+    <div class="container mt-5">
+        <h2>Crear fecha Promocional</h2>
+        <form id="cambiarFechaForm">
+            <div class="mb-2">
+                <label for="nombrePromocion" class="form-label">Nombre de fecha promocional</label>
+                <input type="text" class="form-control" id="nombrePromocion" name="nombrePromocion" required>
+            </div>
+            <div class="mb-2">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <input type="text" class="form-control" id="descripcion" name="descripcion" required>
+            </div>
+            <div class="mb-2">
+                <label for="fechaInicio" class="form-label">Fecha de inicio promoción</label>
+                <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required>
+            </div>
+            <div class="mb-2">
+                <label for="fechaFin" class="form-label">Fecha fin promoción</label>
+                <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required>
+            </div>
+            <button onclick="validarFecha()" class="btn btn-primary">Agregar Fecha</button>
+        </form>
+    </div>
+
+    <script>
+        function formatearFecha(fecha) {
+            const dia = String(fecha.getDate() + 1).padStart(2, '0');
+            const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+            const anio = fecha.getFullYear();
+
+            return `${dia}/${mes}/${anio}`;
+        }
+
+        function validarFecha(){
+            const nombre = document.getElementById("nombrePromocion").value;
+            const descripcion = document.getElementById("descripcion").value;
+            const fechaInicio = document.getElementById("fechaInicio").value;
+            const fechaFin = document.getElementById("fechaFin").value;
+            
+            if(nombre == ""){
+                alert("Debe agregar un nombre");
+            }else if(descripcion == ""){
+                alert("Debe agregar una descripcion");
+            }else if(fechaInicio == null){
+                alert("Debe agregar una fecha de inicio");
+            }else if(fechaFin == null){
+                alert("Debe agregar una fecha de fin")
+            }else{
+                enviarFormulario();
+            }
+        }
+
+        function enviarFormulario() {
+            const nombre = document.getElementById("nombrePromocion").value;
+            const descripcion = document.getElementById("descripcion").value;
+            const fechaInicio = document.getElementById("fechaInicio").value;
+            const fechaFin = document.getElementById("fechaFin").value;
+
+            const fechaObjeto = new Date(fechaInicio);
+            const fechaInicioFormateada = formatearFecha(fechaObjeto);
+
+            const fechaObjeto2 = new Date(fechaFin);
+            const fechaFinFormateada = formatearFecha(fechaObjeto2);
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/v1/fechas/nuevo',
+                contentType: 'application/json',
+                data: JSON.stringify({ id: null, nombre: nombre, descripcion: descripcion, inicio: fechaInicioFormateada, fin: fechaFinFormateada}),
+                success: function(response) {
+                    alert("La fecha fue cambiada a " + fechaNueva);
+                    window.location.href = '/front/index';
+                },
+                error: function(xhr, status, error) {
+                    alert("No se pudo cambiar la fecha: " + xhr.responseText);
+                    // window.location.href = '/paginaError'; // Cambia '/paginaError' por la URL de destino
+                }
+            });
+        }
+    </script>
+</body>
+</html>

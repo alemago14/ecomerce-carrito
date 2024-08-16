@@ -2,22 +2,26 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head th:replace="~{fragments/plantilla :: head}"></head>
 <body>
-    <nav th:replace="~{fragments/plantilla :: navbar}"></nav>
-    <h1>Login</h1>
+    <h1 class="header">Login</h1>
     <form th:action="@{/login}" method="post">
-        <div>
-            <label>Username:</label>
-            <input type="text" name="username"/>
-        </div>
-        <div>
-            <label>Password:</label>
-            <input type="password" name="password"/>
-        </div>
-        <div>
-            <button type="submit">Login</button>
-        </div>
-        <div th:if="${param.error}">
-            <p>Invalid username or password</p>
+        <div class="container mt-5">
+            <div>
+                <label class="form-label">Username:</label>
+                <input class="form-control" type="text" name="username"/>
+            </div>
+            <div>
+                <label class="form-label">Password:</label>
+                <input class="form-control" type="password" name="password"/>
+            </div>
+            <div class="cart-footer">
+                <button class="btn btn-primary" type="submit">Ingresar</button>
+                <a href="/register">
+                    <button class="btn btn-secondary" type="button">Registrarse</button>
+                </a>
+            </div>
+            <div class="form-control" th:if="${param.error}">
+                <p>Invalid username or password</p>
+            </div>
         </div>
     </form>
 </body>

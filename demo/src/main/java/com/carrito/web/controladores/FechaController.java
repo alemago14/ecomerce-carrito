@@ -36,7 +36,7 @@ public class FechaController {
         try {
             fecha = fechaService.convertirFecha(cadena);
             session.setAttribute("fechaActual", fecha);
-            return new ResponseEntity<>("Fecha nueva ingresada =" + cadena, HttpStatus.CREATED);
+            return new ResponseEntity<>("Fecha nueva ingresada =" + cadena, HttpStatus.OK);
         } catch (Exception e) {
             return  new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

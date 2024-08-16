@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
     <head th:replace="~{fragments/plantilla :: head}">
         <!-- SweetAlert CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -43,9 +43,8 @@
             const fechaObjeto = new Date(inputFecha);
             const fechaFormateada = formatearFecha(fechaObjeto);
 
-            console.log(fechaFormateada); // Usa la fecha formateada según sea necesario
+            console.log(fechaFormateada);
 
-            // Ejemplo de cómo podrías enviar la fecha formateada a tu servidor
             $.ajax({
                 type: 'POST',
                 url: '/api/v1/fecha/ingresarActual',
@@ -55,13 +54,10 @@
                 },
                 success: function(response) {
                     alert("La fecha fue cambiada a " + fechaNueva);
-                    // Redirige a otra página después de que se cierra el alert
-                    window.location.href = '/front/index'; // Cambia '/nuevaPagina' por la URL de destino
+                    window.location.href = '/front/index';
                 },
                 error: function(xhr, status, error) {
                     alert("No se pudo cambiar la fecha: " + xhr.responseText);
-                    // Redirige a otra página en caso de error, si es necesario
-                    // window.location.href = '/paginaError'; // Cambia '/paginaError' por la URL de destino
                 }
             });
         }

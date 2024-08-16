@@ -24,7 +24,6 @@
                         // Asume que `producto.imagen` es el nombre del archivo de la imagen
                         const imagenUrl = '/images/' + producto.imagen; // Ruta a la imagen
                         card.innerHTML = `
-                            <img src="${imagenUrl}" alt="${producto.nombre}" />
                             <h3>${producto.nombre}</h3>
                             <p>Precio: $${producto.precio}</p>
                             <label for="cantidad-${producto.id}">Cantidad:</label>
@@ -41,10 +40,8 @@
         }
 
         function comprarProducto(buttonElement) {
-            // Navegar desde el botón hasta el contenedor principal del producto
             const cardElement = buttonElement.closest('.product-card');
 
-            // Obtener el ID del producto desde un atributo de un elemento dentro de la tarjeta
             const productId = cardElement.querySelector('input[name="cantidad"]').id.split('/')[1];
             const cantidad = cardElement.querySelector('input[name="cantidad"]').value;
             console.log(productId,'+++' ,cantidad);
@@ -61,6 +58,7 @@
                 data: JSON.stringify(itemModel),
                 success: function(response) {
                     console.log('Respuesta del servidor:', response);
+                    window.location.href = '/front/index';
                 },
                 error: function(xhr, status, error) {
                     console.error('Error al agregar el item al carrito:', error);
@@ -68,7 +66,6 @@
             });
         }
 
-        // Cargar los productos cuando se carga la página
         document.addEventListener('DOMContentLoaded', cargarProductos);
     </script>
 

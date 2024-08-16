@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -100,7 +99,7 @@ public class CarritoControler {
     public ResponseEntity<Object> limpiarCarrito(HttpSession session) {
         CarritoModel carritoModel = new CarritoModel();
         session.setAttribute("carrito", carritoModel);
-        return new ResponseEntity<>("Carrito Limpiado", HttpStatus.CREATED);
+        return new ResponseEntity<>("Carrito Limpiado", HttpStatus.OK);
     }
 
     @GetMapping("/cantidadItems")

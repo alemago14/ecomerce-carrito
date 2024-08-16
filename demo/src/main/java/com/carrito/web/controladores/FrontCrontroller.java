@@ -32,11 +32,18 @@ public class FrontCrontroller {
         return "compras.html";
     }
 
-    //@PreAuthorize("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     @GetMapping("/usuarios")
     public String verUsuarios() {
         return "usuarios.html";
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @GetMapping("/promo")
+    public String promo() {
+        return "fecha-promo-form.html";
+    }
+    
     
     
     

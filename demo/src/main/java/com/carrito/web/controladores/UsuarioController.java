@@ -39,13 +39,13 @@ public class UsuarioController {
         try {
             usuario.setId(null);
             usuarioService.guardarUsuario(usuario);
-            return new ResponseEntity<>("Usuario creado", HttpStatus.CREATED);
+            return new ResponseEntity<>("Usuario creado", HttpStatus.OK);
         } catch (Exception e) {
             return  new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    //@PreAuthorize("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     @GetMapping("/listar")
     @Operation(summary = "Listar todos los usuarios", description = "Devuelve el listado de todos los usuarios en usuarios en la base de datos")
     public List<Usuario> listarUsuarios() {
@@ -62,7 +62,7 @@ public class UsuarioController {
     public boolean esAdmin(Authentication authentication) {
         Usuario usuario = (Usuario) authentication.getPrincipal();
 
-        return usuario.getRol().equals(Rol.ADMINISTRADOR);
+        return usuario.getRol().equals(Rol.ROLE_ADMINISTRADOR);
     }
     
     

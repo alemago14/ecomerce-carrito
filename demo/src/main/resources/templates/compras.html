@@ -16,23 +16,20 @@
             </tr>
         </thead>
         <tbody id="carritosTable">
-            <!-- Los datos se insertarán aquí dinámicamente -->
         </tbody>
     </table>
 </div>
 
-<!-- Incluye jQuery y Bootstrap JS -->
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
     $(document).ready(function() {
-        // Cargar los carritos al cargar la página
         $.ajax({
             url: '/api/v1/carrito/misCarritos',
             type: 'GET',
             success: function(carritos) {
-                // Verifica si hay carritos
                 if (carritos.length > 0) {
                     carritos.forEach(function(carrito) {
                         $('#carritosTable').append(`
@@ -54,12 +51,6 @@
             }
         });
     });
-
-    // Función para ver los detalles de un carrito
-    function verDetalles(idCarrito) {
-        // Redirigir a una página de detalles del carrito, por ejemplo:
-        window.location.href = `/front/detallesCarrito?id=${idCarrito}`;
-    }
 </script>
 
 <style>

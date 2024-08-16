@@ -63,7 +63,7 @@ public class UsuarioService {
         }
 
         usuario = usuarioConverter.modeloToEntidad(usuarioModel);
-        usuario.setRol(Rol.NORMAL);
+        usuario.setRol(Rol.ROLE_NORMAL);
         usuario.setPassword(passwordEncoder.encode(usuarioModel.getPassword()));
         usuario.setCarritos(new ArrayList<>());
 
@@ -79,9 +79,19 @@ public class UsuarioService {
     public Usuario verificarRol(String idUsuario, LocalDate fechaActual){
         Usuario usuario = usuarioRepository.getReferenceById(idUsuario);
 
-        double totalMes = carritoRepository.calcularTotalMes(idUsuario, fechaActual.minusMonths(1), fechaActual);
+        if(usuario.getRol().equals(Rol.ROLE_ADMINISTRADOR)){
+            return usuario;
+        }
 
-        Rol nuevoRol = totalMes > 10000 ? Rol.VIP : Rol.NORMAL;
+        double totalMes = 0;
+        try {
+            totalMes = (carritoRepository.calcularTotalMes(idUsuario, fechaActual.minusMonths(1), fechaActual));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        
+
+        Rol nuevoRol = totalMes > 10000 ? Rol.ROLE_VIP : Rol.ROLE_NORMAL;
 
         if(!usuario.getRol().equals(nuevoRol)){
             usuario.setRol(nuevoRol);

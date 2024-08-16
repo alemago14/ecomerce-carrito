@@ -41,7 +41,7 @@ public class ProductoController {
     public ResponseEntity<Object> nuevoProducto(@RequestBody ProductoModel model) {
        try {
         productoService.guardar(model);
-        return new ResponseEntity<>("Producto nuevo ingresado", HttpStatus.CREATED);
+        return new ResponseEntity<>("Producto nuevo ingresado", HttpStatus.OK);
        } catch (Exception e) {
         return  new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
        }

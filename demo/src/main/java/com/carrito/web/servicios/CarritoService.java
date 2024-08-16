@@ -70,7 +70,7 @@ public class CarritoService {
             if(fechasPromocionalesService.hayPromocion(fechaActual)){
                 carritoModel.setTipoCarrito(TipoCarrito.PROMOCIONAL);
             }else{
-                if(usuario.getRol().equals(Rol.VIP)){
+                if(usuario.getRol().equals(Rol.ROLE_VIP)){
                     carritoModel.setTipoCarrito(TipoCarrito.VIP);
                 }else{
                     carritoModel.setTipoCarrito(TipoCarrito.NORMAL);
@@ -104,6 +104,14 @@ public class CarritoService {
             items.remove(item);
             model.setItems(items);
         }
+
+        model.setDescuento(calcularDescuento(model));
+
+        
+        model.setTotalParcial(calcularPrecioParcial(model));
+
+        model.setTotal(model.getTotalParcial() - model.getDescuento());
+        model.setItems(nombrarItems(model.getItems()));
 
         return model;
     }

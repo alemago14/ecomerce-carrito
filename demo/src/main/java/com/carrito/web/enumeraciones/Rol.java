@@ -1,9 +1,9 @@
 package com.carrito.web.enumeraciones;
 
 public enum Rol {
-    ADMINISTRADOR ("Administrador"),
-    NORMAL ("Normal"),
-    VIP ("VIP");
+    ROLE_ADMINISTRADOR ("Administrador"),
+    ROLE_NORMAL ("Normal"),
+    ROLE_VIP ("VIP");
 
     private Rol(String texto){
         this.texto = texto;
