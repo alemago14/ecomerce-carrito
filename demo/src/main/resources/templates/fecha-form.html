@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head th:replace="~{fragments/plantilla :: head}">
+        <!-- SweetAlert CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+        <!-- SweetAlert JS -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+<body>
+    <nav th:replace="~{fragments/plantilla :: navbar}"></nav>
+    <div class="container mt-5">
+        <h2>Cambiar Fecha</h2>
+        <form id="cambiarFechaForm">
+            <div class="mb-3">
+                <label for="nuevaFecha" class="form-label">Nueva Fecha</label>
+                <input type="date" class="form-control" id="nuevaFecha" name="nuevaFecha" required>
+            </div>
+            <button onclick="validarFecha()" class="btn btn-primary">Cambiar Fecha</button>
+        </form>
+    </div>
+
+    <script>
+        function formatearFecha(fecha) {
+            const dia = String(fecha.getDate() + 1).padStart(2, '0');
+            const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+            const anio = fecha.getFullYear();
+
+            return `${dia}/${mes}/${anio}`;
+        }
+
+        function validarFecha(){
+            const inputFecha = document.getElementById("nuevaFecha").value;
+            if(inputFecha == null){
+                alert("Debe ingresar una fecha.")
+            }else{
+                enviarFormulario();
+            }
+        }
+
+        function enviarFormulario() {
+            const inputFecha = document.getElementById("nuevaFecha").value;
+            const fechaObjeto = new Date(inputFecha);
+            const fechaFormateada = formatearFecha(fechaObjeto);
+
+            console.log(fechaFormateada); // Usa la fecha formateada según sea necesario
+
+            // Ejemplo de cómo podrías enviar la fecha formateada a tu servidor
+            $.ajax({
+                type: 'POST',
+                url: '/api/v1/fecha/ingresarActual',
+                contentType: 'application/x-www-form-urlencoded',
+                data: {
+                    cadena: fechaFormateada
+                },
+                success: function(response) {
+                    alert("La fecha fue cambiada a " + fechaNueva);
+                    // Redirige a otra página después de que se cierra el alert
+                    window.location.href = '/front/index'; // Cambia '/nuevaPagina' por la URL de destino
+                },
+                error: function(xhr, status, error) {
+                    alert("No se pudo cambiar la fecha: " + xhr.responseText);
+                    // Redirige a otra página en caso de error, si es necesario
+                    // window.location.href = '/paginaError'; // Cambia '/paginaError' por la URL de destino
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -15,12 +15,14 @@ import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
 
-@RestController("/api/v1/fecha")
+@RestController
+@RequestMapping("/api/v1/fecha")
 @Tag(name="Fecha actual", description = "Gestion para ingresar la fecha que va a usar el sistema durante la sesion.")
 public class FechaController {
     
@@ -45,7 +47,7 @@ public class FechaController {
     public LocalDate obtenerFechaActual(HttpSession session) {
         LocalDate fechaActual = (LocalDate) session.getAttribute("fechaActual");
         if(fechaActual == null){
-            return null;
+            return LocalDate.now();
         }
         return fechaActual;
     }

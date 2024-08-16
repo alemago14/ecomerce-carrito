@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -39,6 +39,9 @@ public class CarritoService {
     @Autowired
     private FechasPromocionalesService fechasPromocionalesService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     public CarritoModel agregarItem(ItemCarritoModel item, CarritoModel carritoModel, LocalDate fechaActual, Usuario usuario) throws WebException{
         itemCarritoService.validarDatos(item);
 
@@ -56,6 +59,8 @@ public class CarritoService {
         if(usuario == null){
             throw new WebException("Debe haber un usuario logueado");
         }
+
+        usuario = usuarioService.verificarRol(usuario.getId(), fechaActual);
 
         if(carritoModel.getFecha() == null || carritoModel.getFecha().isEmpty()){
             carritoModel.setFecha(convertirFechaAString(fechaActual));
@@ -75,10 +80,11 @@ public class CarritoService {
 
         carritoModel.setDescuento(calcularDescuento(carritoModel));
 
-        Producto producto = productoService.buscarPorId(item.getIdProducto());
-        carritoModel.setTotalParcial(carritoModel.getTotalParcial() + (producto.getPrecio() * item.getCantidad()));
+        
+        carritoModel.setTotalParcial(calcularPrecioParcial(carritoModel));
 
         carritoModel.setTotal(carritoModel.getTotalParcial() - carritoModel.getDescuento());
+        carritoModel.setItems(nombrarItems(carritoModel.getItems()));
         return carritoModel;
     }
 
@@ -227,6 +233,50 @@ public class CarritoService {
     public boolean debeModificar(CarritoModel carritoModel, ItemCarritoModel itemModel){
         return carritoModel.getItems().stream()
                     .anyMatch(item -> item.getIdProducto().equals(itemModel.getIdProducto()));
+    }
+
+    public double calcularPrecioParcial(CarritoModel model){
+        double precioParcial = 0;
+
+        for (ItemCarritoModel item : model.getItems()) {
+            Producto producto = productoService.buscarPorId(item.getIdProducto());
+            precioParcial += producto.getPrecio() * item.getCantidad();
+        }
+
+        return precioParcial;
+    }
+
+    public int contarItems(CarritoModel carritoModel){
+        return carritoModel.getItems().size();
+    }
+
+    public List<ItemCarritoModel> nombrarItems(List<ItemCarritoModel> model){
+        for (ItemCarritoModel itemCarritoModel : model) {
+            Producto producto = productoService.buscarPorId(itemCarritoModel.getIdProducto());
+            itemCarritoModel.setNombre(producto.getNombre());
+        }
+        return model;
+    }
+
+    public List<CarritoModel> misCarritos(Usuario usuario) throws WebException{
+        List<Carrito> carros = carritoRepository.misCarritos(usuario.getId());
+        List<CarritoModel> carritoModels = new ArrayList<>();
+
+        for (Carrito carrito : carros) {
+            CarritoModel model = new CarritoModel();
+            BeanUtils.copyProperties(carrito, model);
+            model.setFecha(convertirFechaAString(carrito.getFechaCompra()));
+            List<ItemCarritoModel> items = new ArrayList<>();
+            for (ItemCarrito item : carrito.getItems()) {
+                ItemCarritoModel itemModel = new ItemCarritoModel();
+                itemModel = itemCarritoService.convertirModel(item);
+                items.add(itemModel);
+            }
+            model.setItems(items);
+            carritoModels.add(model);
+        }
+
+        return carritoModels;
     }
 
 }

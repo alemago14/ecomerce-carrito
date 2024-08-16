@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Login</title>
-</head>
+    <head th:replace="~{fragments/plantilla :: head}"></head>
 <body>
+    <nav th:replace="~{fragments/plantilla :: navbar}"></nav>
     <h1>Login</h1>
     <form th:action="@{/login}" method="post">
         <div>

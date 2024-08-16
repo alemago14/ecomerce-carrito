@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head th:replace="~{fragments/plantilla :: head}"></head>
+<body>
+    <nav th:replace="~{fragments/plantilla :: navbar}"></nav>
+<div class="carritos-container">
+    <h2>Mis Carritos</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Tipo de Carrito</th>
+                <th>Total Parcial</th>
+                <th>Descuento</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody id="carritosTable">
+            <!-- Los datos se insertarán aquí dinámicamente -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Incluye jQuery y Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Cargar los carritos al cargar la página
+        $.ajax({
+            url: '/api/v1/carrito/misCarritos',
+            type: 'GET',
+            success: function(carritos) {
+                // Verifica si hay carritos
+                if (carritos.length > 0) {
+                    carritos.forEach(function(carrito) {
+                        $('#carritosTable').append(`
+                            <tr>
+                                <td>${carrito.fecha}</td>
+                                <td>${carrito.tipoCarrito}</td>
+                                <td>$${carrito.totalParcial.toFixed(2)}</td>
+                                <td>$${carrito.descuento.toFixed(2)}</td>
+                                <td>$${carrito.total.toFixed(2)}</td>
+                            </tr>
+                        `);
+                    });
+                } else {
+                    $('#carritosTable').append('<tr><td colspan="7">No tienes carritos.</td></tr>');
+                }
+            },
+            error: function() {
+                alert('Error al cargar los carritos. Por favor, intenta nuevamente.');
+            }
+        });
+    });
+
+    // Función para ver los detalles de un carrito
+    function verDetalles(idCarrito) {
+        // Redirigir a una página de detalles del carrito, por ejemplo:
+        window.location.href = `/front/detallesCarrito?id=${idCarrito}`;
+    }
+</script>
+
+<style>
+    .carritos-container {
+        max-width: 1000px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .table th, .table td {
+        text-align: center;
+    }
+</style>
+
+</body>
+</html>

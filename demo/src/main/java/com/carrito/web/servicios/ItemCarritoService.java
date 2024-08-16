@@ -52,4 +52,10 @@ public class ItemCarritoService {
         }
         return items;
     }
+
+    public ItemCarritoModel convertirModel(ItemCarrito item) throws WebException{
+        ItemCarritoModel model = new ItemCarritoModel();
+        model = itemCarritoConverter.entidadToModelo(item);
+        return model;
+    }
 }
